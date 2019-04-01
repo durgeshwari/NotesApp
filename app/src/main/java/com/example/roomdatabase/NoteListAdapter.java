@@ -26,10 +26,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     private List<Note> mNotes;
     private OnDeleteClickListener onDeleteClickListener;
 
-    public NoteListAdapter(Context context) {
+    public NoteListAdapter(Context context, OnDeleteClickListener listener) {
         layoutInflater = LayoutInflater.from(context);
         mContext = context;
-       // this.onDeleteClickListener = listener;
+        this.onDeleteClickListener = listener;
     }
 
     @NonNull
@@ -46,7 +46,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         if (mNotes != null) {
             Note note = mNotes.get(position);
             holder.setData(note.getNote(), position);
-             holder.setListeners();
+            holder.setListeners();
         } else {
             // Covers the case of data not being ready yet.
             holder.noteItemView.setText(R.string.no_note);
@@ -67,16 +67,16 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
 
-       private TextView noteItemView;
+        private TextView noteItemView;
         private int mPosition;
         private ImageView imgDelete, imgEdit;
 
-     public NoteViewHolder(View itemView) {
-           super(itemView);
+        public NoteViewHolder(View itemView) {
+            super(itemView);
             noteItemView = itemView.findViewById(R.id.txvNote);
-          imgDelete = itemView.findViewById(R.id.ivRowDelete);
+            imgDelete = itemView.findViewById(R.id.ivRowDelete);
             imgEdit = itemView.findViewById(R.id.ivRowEdit);
-     }
+        }
 
         public void setData(String note, int position) {
             noteItemView.setText(note);
@@ -89,25 +89,20 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, EditNoteActivity.class);
                     intent.putExtra("note_id", mNotes.get(mPosition).getId());
-                    ((Activity)mContext).startActivityForResult(intent, MainActivity.UPDATE_NOTE_ACTIVITY_REQUEST_CODE);
+                    ((Activity) mContext).startActivityForResult(intent, MainActivity.UPDATE_NOTE_ACTIVITY_REQUEST_CODE);
                 }
 
 
-        });
+            });
+
+            imgDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onDeleteClickListener != null) {
+                        onDeleteClickListener.OnDeleteClickListener(mNotes.get(mPosition));
+                    }
+                }
+            });
         }
     }
 }
-
-
-
-
-//
-//        imgDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (onDeleteClickListener != null) {
-//                    onDeleteClickListener.OnDeleteClickListener(mNotes.get(mPosition));
-//                }
-//            }
-//        });
-

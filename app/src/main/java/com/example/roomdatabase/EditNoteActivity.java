@@ -36,6 +36,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
 
         //fetching the note and observing
+        noteModel = ViewModelProviders.of(this).get(EditNoteViewModel.class);
         note = noteModel.getNote(noteId);
         note.observe(this, new Observer<Note>() {
             @Override
@@ -43,10 +44,9 @@ public class EditNoteActivity extends AppCompatActivity {
                 etNote.setText(note.getNote());
             }
         });
-
     }
 
-    public void updateNote(){
+    public void updateNote(View view){
         String updateNote=etNote.getText().toString();
         Intent resultIntent=new Intent();
         resultIntent.putExtra(NOTE_ID,noteId);

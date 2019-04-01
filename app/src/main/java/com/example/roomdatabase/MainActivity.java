@@ -20,7 +20,7 @@ import java.util.UUID;
 
 import static android.arch.lifecycle.ViewModelProviders.*;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NoteListAdapter.OnDeleteClickListener {
 
     private static final int NEW_NOTE_ACTIVITY_REQUEST_CODE = 1 ;
     public static int UPDATE_NOTE_ACTIVITY_REQUEST_CODE=2;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         RecyclerView mRecyclerView=findViewById(R.id.recyclerview);
-        mNoteListAdapter=new NoteListAdapter(this);
+        mNoteListAdapter=new NoteListAdapter(this,this);
         mRecyclerView.setAdapter(mNoteListAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -92,5 +92,12 @@ public class MainActivity extends AppCompatActivity {
                     R.string.not_saved,
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+
+    @Override
+    public void OnDeleteClickListener(Note myNote) {
+        // Code for Delete operation
+        mNoteVieModel.delete(myNote);
     }
 }

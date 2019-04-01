@@ -42,6 +42,10 @@ public class NoteVieModel extends AndroidViewModel {
     public  void update(Note note){
         new UpdateAsyncTask(mDao).execute(note);
     }
+    public void delete(Note note) {
+        new DeleteAsyncTask(mDao).execute(note);
+    }
+
 
     @Override
     protected void onCleared() {
@@ -90,5 +94,17 @@ public class NoteVieModel extends AndroidViewModel {
         }
     }
 
+    private class DeleteAsyncTask extends OperationsAsyncTask {
+
+        public DeleteAsyncTask(dao mDao) {
+            super(mDao);
+        }
+
+        @Override
+        protected Void doInBackground(Note... notes) {
+            mAsyncTaskDao.delete(notes[0]);
+            return null;
+        }
+    }
 }
 
